@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huxhar - Hub Minimalista</title>
-    <!-- Librería de iconos minimalistas -->
+    <title>Web Ultraminimalista</title>
+    <!-- Librería de iconos minimalistas (Feather Icons) -->
     <script src="https://unpkg.com/feather-icons"></script>
     <style>
         /* === ESTILOS BASE === */
@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none; /* Ocultamos el cursor del sistema */
+            cursor: none; /* Ocultamos el cursor por defecto del sistema */
         }
 
         body {
@@ -23,56 +23,55 @@
             background-image:
                 linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-size: 40px 40px; /* Tamaño de los cuadros */
             
             height: 100vh;
             overflow: hidden;
             display: flex;
-            flex-direction: column;
-            align-items: center; /* Centrado horizontal */
+            justify-content: center;
             font-family: system-ui, -apple-system, sans-serif;
-            user-select: none; /* Evita que el texto se seleccione por accidente */
+            user-select: none;
         }
 
-        /* === CURSOR PERSONALIZADO (FORMA DE MOUSE) === */
+        /* === CURSOR PERSONALIZADO === */
         .cursor {
-            width: 28px;
-            height: 28px;
+            width: 20px;
+            height: 20px;
+            background-color: black;
+            border: 2px solid white;
+            border-radius: 50%;
             position: fixed;
-            pointer-events: none; /* Los clics lo traspasan */
+            pointer-events: none; /* Permite que los clics pasen a través del cursor */
             z-index: 9999;
-            /* Dibujamos un mouse en SVG negro con borde blanco */
-            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 2L18 10L12 13L16 20L13 21.5L9 14.5L4 18.5V2Z" fill="black" stroke="white" stroke-width="1.5" stroke-linejoin="round"/></svg>');
-            background-size: contain;
-            background-repeat: no-repeat;
-            
-            /* Ajustamos ligeramente para que la punta exacta del SVG sea el centro del clic */
-            transform: translate(-2px, -2px);
-            /* La posición en la pantalla se maneja en JS */
+            transform: translate(-50%, -50%);
+            opacity: 0; /* Empieza oculto hasta que el mouse entra */
+            transition: opacity 0.2s ease; /* Transición suave al aparecer/desaparecer */
         }
 
         /* === CONTENEDOR SUPERIOR (NAV) === */
         .floating-container {
-            margin-top: 35px; /* Separación de arriba */
+            margin-top: 35px; /* Separado del borde superior */
             background: rgba(30, 33, 40, 0.4);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px); /* Efecto cristal minimalista */
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 35px;
+            border-radius: 35px; /* Bordes ultra redondeados */
             padding: 15px 40px;
             display: flex;
-            gap: 45px;
+            gap: 45px; /* Separación entre iconos */
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
             z-index: 100;
+            height: fit-content;
         }
 
         /* === ICONOS === */
         .nav-item {
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.3); /* Color apagado por defecto */
             text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
+            /* Transición fluida con curva de rebote (Cubic Bezier) */
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
@@ -81,89 +80,97 @@
             height: 26px;
         }
 
-        .nav-item:hover {
-            color: #ffffff;
-            transform: translateY(8px);
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9));
-        }
-
-        /* === TÍTULO PRINCIPAL === */
-        .title {
-            margin-top: 50px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 3.5rem;
-            font-weight: 200;
-            letter-spacing: 15px; /* Separación épica entre letras */
-            text-transform: uppercase;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1); /* Ligero brillo */
-        }
-        
-        .subtitle {
-            margin-top: 10px;
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 0.9rem;
-            letter-spacing: 5px;
-            font-weight: 300;
-            text-transform: uppercase;
+        /* === EFECTO HOVER MANEJADO POR JAVASCRIPT === */
+        /* Cambiamos el :hover nativo por una clase para usar la hitbox del cursor visual */
+        .nav-item.is-hovered {
+            color: #ffffff; /* Se vuelve blanco puro */
+            transform: translateY(8px); /* Baja un poco */
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9)); /* Se ilumina */
         }
     </style>
 </head>
 <body>
 
-    <!-- Cursor en forma de mouse -->
+    <!-- Cursor custom -->
     <div class="cursor"></div>
 
     <!-- Menú superior flotante -->
     <nav class="floating-container">
+        <!-- Iconos: Casita + 4 randoms -->
         <a href="#" class="nav-item"><i data-feather="home"></i></a>
-        <a href="#" class="nav-item"><i data-feather="grid"></i></a>
-        <a href="#" class="nav-item"><i data-feather="monitor"></i></a>
-        <a href="#" class="nav-item"><i data-feather="headphones"></i></a>
+        <a href="#" class="nav-item"><i data-feather="compass"></i></a>
+        <a href="#" class="nav-item"><i data-feather="cpu"></i></a>
+        <a href="#" class="nav-item"><i data-feather="moon"></i></a>
         <a href="#" class="nav-item"><i data-feather="terminal"></i></a>
     </nav>
 
-    <!-- Título principal -->
-    <h1 class="title">Huxhar</h1>
-    <p class="subtitle">Hub Central</p>
-
     <script>
-        // Inicializar los iconos
+        // Inicializar los iconos de Feather Icons
         feather.replace();
 
         /* =========================================
-           1. LÓGICA DEL CURSOR FLUIDO 
+           1. LÓGICA DEL CURSOR FLUIDO Y HITBOX VISUAL
            ========================================= */
         const cursor = document.querySelector('.cursor');
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
         let cursorX = mouseX;
         let cursorY = mouseY;
+        let currentHoveredElement = null;
 
+        // Rastreamos la posición real del mouse
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
+            if (cursor.style.opacity === '0' || cursor.style.opacity === '') {
+                cursor.style.opacity = '1';
+            }
         });
 
+        // Ocultar el cursor si sale de la ventana
+        document.addEventListener('mouseleave', () => {
+            cursor.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', () => {
+            cursor.style.opacity = '1';
+        });
+
+        // Bucle de animación ultra suave
         function animateCursor() {
-            // REDUJIMOS el multiplicador (de 0.25 a 0.08)
-            // Esto le da mucho más retardo (delay) y una fluidez extrema, 
-            // sintiéndose como si flotara hacia tu mouse (120FPS feel).
-            cursorX += (mouseX - cursorX) * 0.08;
-            cursorY += (mouseY - cursorY) * 0.08;
+            // Factor incrementado a 0.45 para MÁS fluidez y MENOS retraso
+            cursorX += (mouseX - cursorX) * 0.45;
+            cursorY += (mouseY - cursorY) * 0.45;
 
             cursor.style.left = `${cursorX}px`;
             cursor.style.top = `${cursorY}px`;
+
+            // LÓGICA DE HITBOX: Comprobar colisión usando el cursor visual, NO el mouse real
+            const elUnderCursor = document.elementFromPoint(cursorX, cursorY);
+            const navItem = elUnderCursor ? elUnderCursor.closest('.nav-item') : null;
+
+            if (navItem !== currentHoveredElement) {
+                // Quitar hover al salir
+                if (currentHoveredElement) {
+                    currentHoveredElement.classList.remove('is-hovered');
+                }
+                // Añadir hover y sonido al entrar
+                if (navItem) {
+                    navItem.classList.add('is-hovered');
+                    playTic();
+                }
+                currentHoveredElement = navItem;
+            }
 
             requestAnimationFrame(animateCursor);
         }
         animateCursor();
 
         /* =========================================
-           2. MOTOR DE AUDIO NATIVO (TIC y WUSS)
+           2. SINTETIZADOR DE SONIDOS (Web Audio API)
            ========================================= */
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        // 2a. Sonido "TIC" (Hover de iconos)
+        // Sonido 1: Tic minimalista (Hover)
         function playTic() {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             
@@ -184,56 +191,41 @@
             oscillator.stop(audioCtx.currentTime + 0.04);
         }
 
-        // 2b. Sonido "WUSS~~" (Clic en la página)
-        function playWush() {
+        // Sonido 2: "Waw" agudo (Click)
+        function playWaw() {
             if (audioCtx.state === 'suspended') audioCtx.resume();
 
-            // Creamos ruido blanco para simular aire/viento
-            const bufferSize = audioCtx.sampleRate * 0.5; // Medio segundo
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-                data[i] = Math.random() * 2 - 1; // Ruido
-            }
-
-            const noiseSource = audioCtx.createBufferSource();
-            noiseSource.buffer = buffer;
-
-            // Usamos un filtro Lowpass para hacer que el ruido suene como "wuss" (opaco)
+            const oscillator = audioCtx.createOscillator();
             const filter = audioCtx.createBiquadFilter();
-            filter.type = 'lowpass';
-            
-            // Frecuencia baja rápidamente (da la sensación de barrido o swoosh)
-            filter.frequency.setValueAtTime(2000, audioCtx.currentTime);
-            filter.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.4);
-
-            // Control de volumen para el fade-out (desvanecimiento)
             const gainNode = audioCtx.createGain();
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-            // Sube rápido el volumen y luego baja lentamente (la "cola" del wuss~~)
-            gainNode.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.05);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
 
-            noiseSource.connect(filter);
+            // Usamos onda de sierra para tener armónicos y poder filtrarlos
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.value = 300; // Tono base
+            
+            // Filtro Bandpass para el efecto "Waw/Wah"
+            filter.type = 'bandpass';
+            // Frecuencia que sube muy rápido y luego baja (lo hace "agudo")
+            filter.frequency.setValueAtTime(800, audioCtx.currentTime);
+            filter.frequency.exponentialRampToValueAtTime(4000, audioCtx.currentTime + 0.08); // Barrido agudo
+            filter.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.2);
+
+            // Volumen
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.03); // Ataque rápido
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2); // Desvanecimiento
+
+            // Conexiones
+            oscillator.connect(filter);
             filter.connect(gainNode);
             gainNode.connect(audioCtx.destination);
 
-            noiseSource.start();
-            noiseSource.stop(audioCtx.currentTime + 0.5);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.25);
         }
 
-        /* =========================================
-           3. EVENTOS
-           ========================================= */
-        
-        // Asignar el TIC al pasar el cursor sobre los iconos
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            item.addEventListener('mouseenter', playTic);
-        });
-
-        // Asignar el WUSS~~ al hacer clic en cualquier parte de la página
-        document.addEventListener('click', playWush);
+        // Evento de clic en toda la pantalla para el "Waw"
+        document.addEventListener('click', playWaw);
 
     </script>
 </body>
