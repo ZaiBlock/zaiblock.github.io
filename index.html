@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Ultraminimalista</title>
+    <title>Huxhar</title>
     <!-- Librería de iconos minimalistas (Feather Icons) -->
     <script src="https://unpkg.com/feather-icons"></script>
     <style>
@@ -28,7 +28,8 @@
             height: 100vh;
             overflow: hidden;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             font-family: system-ui, -apple-system, sans-serif;
             user-select: none;
         }
@@ -44,8 +45,8 @@
             pointer-events: none; /* Permite que los clics pasen a través del cursor */
             z-index: 9999;
             transform: translate(-50%, -50%);
-            opacity: 0; /* Empieza oculto hasta que el mouse entra */
-            transition: opacity 0.2s ease; /* Transición suave al aparecer/desaparecer */
+            opacity: 0; /* Oculto hasta que el mouse entra en pantalla */
+            transition: opacity 0.2s ease;
         }
 
         /* === CONTENEDOR SUPERIOR (NAV) === */
@@ -80,12 +81,22 @@
             height: 26px;
         }
 
-        /* === EFECTO HOVER MANEJADO POR JAVASCRIPT === */
-        /* Cambiamos el :hover nativo por una clase para usar la hitbox del cursor visual */
-        .nav-item.is-hovered {
+        /* === EFECTO HOVER EN ICONOS === */
+        .nav-item:hover {
             color: #ffffff; /* Se vuelve blanco puro */
             transform: translateY(8px); /* Baja un poco */
             filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9)); /* Se ilumina */
+        }
+
+        /* === TÍTULO HUXHAR === */
+        .title {
+            margin-top: 60px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 3.5rem;
+            font-weight: 200;
+            letter-spacing: 16px;
+            text-transform: uppercase;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
@@ -104,30 +115,30 @@
         <a href="#" class="nav-item"><i data-feather="terminal"></i></a>
     </nav>
 
+    <!-- Nombre del Hub debajo del cuadro -->
+    <h1 class="title">Huxhar</h1>
+
     <script>
         // Inicializar los iconos de Feather Icons
         feather.replace();
 
         /* =========================================
-           1. LÓGICA DEL CURSOR FLUIDO Y HITBOX VISUAL
+           1. LÓGICA DEL CURSOR FLUIDO (Lerp a 120fps)
            ========================================= */
         const cursor = document.querySelector('.cursor');
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
         let cursorX = mouseX;
         let cursorY = mouseY;
-        let currentHoveredElement = null;
 
         // Rastreamos la posición real del mouse
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            if (cursor.style.opacity === '0' || cursor.style.opacity === '') {
-                cursor.style.opacity = '1';
-            }
+            cursor.style.opacity = '1';
         });
 
-        // Ocultar el cursor si sale de la ventana
+        // Ocultar al salir de la ventana y mostrar al volver
         document.addEventListener('mouseleave', () => {
             cursor.style.opacity = '0';
         });
@@ -135,31 +146,14 @@
             cursor.style.opacity = '1';
         });
 
-        // Bucle de animación ultra suave
+        // Bucle de animación ultra suave usando interpolación
         function animateCursor() {
-            // Factor incrementado a 0.45 para MÁS fluidez y MENOS retraso
-            cursorX += (mouseX - cursorX) * 0.45;
-            cursorY += (mouseY - cursorY) * 0.45;
+            // Ajuste a 0.55: respuesta inmediata sin lag en la selección
+            cursorX += (mouseX - cursorX) * 0.55;
+            cursorY += (mouseY - cursorY) * 0.55;
 
             cursor.style.left = `${cursorX}px`;
             cursor.style.top = `${cursorY}px`;
-
-            // LÓGICA DE HITBOX: Comprobar colisión usando el cursor visual, NO el mouse real
-            const elUnderCursor = document.elementFromPoint(cursorX, cursorY);
-            const navItem = elUnderCursor ? elUnderCursor.closest('.nav-item') : null;
-
-            if (navItem !== currentHoveredElement) {
-                // Quitar hover al salir
-                if (currentHoveredElement) {
-                    currentHoveredElement.classList.remove('is-hovered');
-                }
-                // Añadir hover y sonido al entrar
-                if (navItem) {
-                    navItem.classList.add('is-hovered');
-                    playTic();
-                }
-                currentHoveredElement = navItem;
-            }
 
             requestAnimationFrame(animateCursor);
         }
@@ -170,10 +164,11 @@
            ========================================= */
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        // Sonido 1: Tic minimalista (Hover)
+        // Tic al pasar por los iconos
         function playTic() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
             const oscillator = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
 
@@ -191,42 +186,46 @@
             oscillator.stop(audioCtx.currentTime + 0.04);
         }
 
-        // Sonido 2: "Waw" agudo (Click)
+        // "Waw" agudo al hacer clic
         function playWaw() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
             const oscillator = audioCtx.createOscillator();
             const filter = audioCtx.createBiquadFilter();
             const gainNode = audioCtx.createGain();
 
-            // Usamos onda de sierra para tener armónicos y poder filtrarlos
             oscillator.type = 'sawtooth';
-            oscillator.frequency.value = 300; // Tono base
-            
-            // Filtro Bandpass para el efecto "Waw/Wah"
+            oscillator.frequency.setValueAtTime(450, audioCtx.currentTime);
+
             filter.type = 'bandpass';
-            // Frecuencia que sube muy rápido y luego baja (lo hace "agudo")
-            filter.frequency.setValueAtTime(800, audioCtx.currentTime);
-            filter.frequency.exponentialRampToValueAtTime(4000, audioCtx.currentTime + 0.08); // Barrido agudo
-            filter.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.2);
+            filter.frequency.setValueAtTime(1200, audioCtx.currentTime);
+            filter.frequency.exponentialRampToValueAtTime(4800, audioCtx.currentTime + 0.07);
+            filter.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.18);
 
-            // Volumen
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.03); // Ataque rápido
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2); // Desvanecimiento
+            gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
 
-            // Conexiones
             oscillator.connect(filter);
             filter.connect(gainNode);
             gainNode.connect(audioCtx.destination);
 
             oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.25);
+            oscillator.stop(audioCtx.currentTime + 0.2);
         }
 
-        // Evento de clic en toda la pantalla para el "Waw"
-        document.addEventListener('click', playWaw);
+        /* =========================================
+           3. EVENTOS
+           ========================================= */
+        const navItems = document.querySelectorAll('.nav-item');
+        
+        navItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                playTic();
+            });
+        });
 
+        document.addEventListener('click', playWaw);
     </script>
 </body>
 </html>
