@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Huxhar</title>
+    <!-- Fuente Glacial Indifference -->
+    <link href="https://fonts.cdnfonts.com/css/glacial-indifference" rel="stylesheet">
     <!-- Librería de iconos minimalistas (Feather Icons) -->
     <script src="https://unpkg.com/feather-icons"></script>
     <style>
@@ -15,6 +17,10 @@
             cursor: none; /* Ocultamos el cursor por defecto del sistema */
         }
 
+        html {
+            scroll-behavior: smooth; /* Desplazamiento suave */
+        }
+
         body {
             /* Fondo azul grisáceo casi imperceptible */
             background-color: #16181d; 
@@ -23,15 +29,28 @@
             background-image:
                 linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 40px 40px; /* Tamaño de los cuadros */
+            background-size: 40px 40px;
             
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-y: auto; /* Permite scroll vertical */
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: 'Glacial Indifference', system-ui, -apple-system, sans-serif;
             user-select: none;
+        }
+
+        /* Scrollbar Minimalista */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #16181d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
         }
 
         /* === CURSOR PERSONALIZADO === */
@@ -42,24 +61,24 @@
             border: 2px solid white;
             border-radius: 50%;
             position: fixed;
-            pointer-events: none; /* Permite que los clics pasen a través del cursor */
+            pointer-events: none;
             z-index: 9999;
             transform: translate(-50%, -50%);
-            opacity: 0; /* Oculto hasta que el mouse entra en pantalla */
+            opacity: 0;
             transition: opacity 0.2s ease;
         }
 
         /* === CONTENEDOR SUPERIOR (NAV) === */
         .floating-container {
-            margin-top: 35px; /* Separado del borde superior */
+            margin-top: 35px;
             background: rgba(30, 33, 40, 0.4);
-            backdrop-filter: blur(10px); /* Efecto cristal minimalista */
+            backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 35px; /* Bordes ultra redondeados */
+            border-radius: 35px;
             padding: 15px 40px;
             display: flex;
-            gap: 45px; /* Separación entre iconos */
+            gap: 45px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
             z-index: 100;
             height: fit-content;
@@ -67,12 +86,11 @@
 
         /* === ICONOS === */
         .nav-item {
-            color: rgba(255, 255, 255, 0.3); /* Color apagado por defecto */
+            color: rgba(255, 255, 255, 0.3);
             text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            /* Transición fluida con curva de rebote (Cubic Bezier) */
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
@@ -81,22 +99,81 @@
             height: 26px;
         }
 
-        /* === EFECTO HOVER EN ICONOS === */
         .nav-item:hover {
-            color: #ffffff; /* Se vuelve blanco puro */
-            transform: translateY(8px); /* Baja un poco */
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9)); /* Se ilumina */
+            color: #ffffff;
+            transform: translateY(8px);
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9));
         }
 
-        /* === TÍTULO HUXHAR === */
-        .title {
+        /* === CONTENIDO PRINCIPAL === */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
             margin-top: 60px;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .title {
             color: rgba(255, 255, 255, 0.85);
-            font-size: 3.5rem;
-            font-weight: 200;
+            font-size: 3.8rem;
+            font-weight: 700;
             letter-spacing: 16px;
             text-transform: uppercase;
             text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .description {
+            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        /* Contenedor espaciador para habilitar el scroll suave */
+        .scroll-space {
+            height: 60vh;
+        }
+
+        /* === FOOTER MINIMALISTA === */
+        .footer {
+            margin-bottom: 30px;
+            background: rgba(25, 28, 34, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 18px 35px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+        }
+
+        .ai-credit {
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .gemini-logo {
+            width: 11px;
+            height: 11px;
+            fill: rgba(255, 255, 255, 0.35);
         }
     </style>
 </head>
@@ -107,7 +184,6 @@
 
     <!-- Menú superior flotante -->
     <nav class="floating-container">
-        <!-- Iconos: Casita + 4 randoms -->
         <a href="#" class="nav-item"><i data-feather="home"></i></a>
         <a href="#" class="nav-item"><i data-feather="compass"></i></a>
         <a href="#" class="nav-item"><i data-feather="cpu"></i></a>
@@ -115,8 +191,25 @@
         <a href="#" class="nav-item"><i data-feather="terminal"></i></a>
     </nav>
 
-    <!-- Nombre del Hub debajo del cuadro -->
-    <h1 class="title">Huxhar</h1>
+    <!-- Contenido Central -->
+    <main class="main-content">
+        <h1 class="title">Huxhar</h1>
+        <p class="description">Centro de herramientas, utilidades, emuladores y proyectos.</p>
+    </main>
+
+    <!-- Espacio para permitir el scroll suave -->
+    <div class="scroll-space"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <span class="copyright">Derechos reservados a Sa1xp</span>
+        <span class="ai-credit">
+            Esta página ha sido creada con ayuda de Gemini
+            <svg class="gemini-logo" viewBox="0 0 24 24">
+                <path d="M12 0C12 6.627 6.627 12 0 12C6.627 12 12 17.373 12 24C12 17.373 17.373 12 24 12C17.373 12 12 6.627 12 0Z"/>
+            </svg>
+        </span>
+    </footer>
 
     <script>
         // Inicializar los iconos de Feather Icons
@@ -131,14 +224,12 @@
         let cursorX = mouseX;
         let cursorY = mouseY;
 
-        // Rastreamos la posición real del mouse
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
             cursor.style.opacity = '1';
         });
 
-        // Ocultar al salir de la ventana y mostrar al volver
         document.addEventListener('mouseleave', () => {
             cursor.style.opacity = '0';
         });
@@ -146,9 +237,7 @@
             cursor.style.opacity = '1';
         });
 
-        // Bucle de animación ultra suave usando interpolación
         function animateCursor() {
-            // Ajuste a 0.55: respuesta inmediata sin lag en la selección
             cursorX += (mouseX - cursorX) * 0.55;
             cursorY += (mouseY - cursorY) * 0.55;
 
@@ -164,7 +253,6 @@
            ========================================= */
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        // Tic al pasar por los iconos
         function playTic() {
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
@@ -186,7 +274,6 @@
             oscillator.stop(audioCtx.currentTime + 0.04);
         }
 
-        // "Waw" agudo al hacer clic
         function playWaw() {
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
